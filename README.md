@@ -42,7 +42,7 @@ This project is a modern, single-page web application built with Angular. It ser
 
 1. **Clone the repository:**
    ```sh
-   git clone <repository-url>
+   git clone https://github.com/mnkiefer/bookstore-angular-ui
    cd bookstore-angular-ui
    ```
 2. **Install dependencies:**

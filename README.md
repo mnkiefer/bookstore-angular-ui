@@ -2,6 +2,10 @@
 
 This project is a modern, single-page web application built with Angular. It serves as the user interface for a bookstore, providing a seamless and interactive experience for browsing and managing books and shopping carts.
 
+<p align="center">
+<img width="836" alt="bookstore-angular-ui" src="https://github.com/user-attachments/assets/dcc30f22-b7e0-48e0-8d09-83531db2b60f" style="width: 80%;"/>
+</p>
+
 ## Features
 
 - **Component-Based Architecture:**

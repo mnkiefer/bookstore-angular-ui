@@ -1,0 +1,86 @@
+<main class="main">
+  <div *ngIf="showFireworks" class="fireworks-overlay" [ngStyle]="fireworksStyle">
+    <svg class="fireworks-svg" viewBox="0 0 120 120">
+      <g>
+        <g>
+          <circle *ngFor="let p of fireworksBurst1"
+            [attr.cx]="p.x"
+            [attr.cy]="p.y"
+            r="7" fill="#fff176">
+            <animate attributeName="r" from="0" to="18" dur="0.7s" repeatCount="1" />
+            <animate attributeName="opacity" from="1" to="0" dur="0.7s" repeatCount="1" />
+          </circle>
+          <circle *ngFor="let p of fireworksBurst2"
+            [attr.cx]="p.x"
+            [attr.cy]="p.y"
+            r="4" fill="#60a5fa">
+            <animate attributeName="r" from="0" to="10" dur="0.7s" repeatCount="1" />
+            <animate attributeName="opacity" from="1" to="0" dur="0.7s" repeatCount="1" />
+          </circle>
+        </g>
+        <circle cx="60" cy="60" r="8" fill="#f87171"/>
+        <circle cx="60" cy="60" r="3" fill="#fff"/>
+      </g>
+    </svg>
+  </div>
+  <header class="page-header">
+    <div class="top-bar">
+      <h1 class="main-title">Bookstore</h1>
+      <div class="cart-icon-container" (click)="cartOpen = !cartOpen">
+        <span class="cart-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M7 20c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm-12.832-2l1.528-8h15.304l1.528 8H4.168zm17.832-10H4.184l-1.72-3.447A1 1 0 0 0 1.517 4H0v2h1.25l1.716 9.016A2 2 0 0 0 4.984 17h12.416a2 2 0 0 0 1.999-1.984L21.116 6H22c.553 0 1-.447 1-1s-.447-1-1-1z"/></svg>
+          <span class="cart-badge" *ngIf="cartBadgeCount > 0">{{ cartBadgeCount }}</span>
+        </span>
+      </div>
+      <div class="cart-dropdown" *ngIf="cartOpen">
+        <app-cart [items]="cartItems"></app-cart>
+      </div>
+    </div>
+    <div class="search-bar-container" style="margin-bottom: 0.5rem;">
+      <input type="text" [(ngModel)]="searchTerm" (input)="onSearch()" placeholder="Search books by title or author..." class="search-bar" />
+    </div>
+  </header>
+  <div class="content">
+    <div class="carousel-arrows-outer">
+      <button class="carousel-nav-btn left" [disabled]="currentSlide === 0" (click)="prevSlide($event)" aria-label="Previous" *ngIf="filteredBooks().length > cardsPerView">
+        <span class="carousel-arrow modern">
+          <svg width="24" height="24" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </button>
+      <div class="carousel-container" style="margin-top: 0; position: relative; display: flex; align-items: center; justify-content: center;">
+        <div class="carousel-track multi"
+          (mousedown)="onDragStart($event)"
+          (mousemove)="onDragMove($event)"
+          (mouseup)="onDragEnd($event)"
+          (mouseleave)="onDragEnd($event)"
+          (touchstart)="onDragStart($event)"
+          (touchmove)="onDragMove($event)"
+          (touchend)="onDragEnd($event)"
+          [ngStyle]="{'transform': 'translateX(' + dragOffset + 'px)', 'transition': isDragging ? 'none' : 'transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1)'}">
+          <div class="carousel-slide multi" *ngFor="let book of visibleBooks; let i = index">
+            <ng-container *ngIf="book">
+              <app-book-card [book]="book"
+                [flipped]="flippedBooks[book.id]"
+                (addToCartEvent)="addToCart($event)"
+                (flipEvent)="setFlipped(book.id, $event)">
+              </app-book-card>
+            </ng-container>
+          </div>
+        </div>
+        <div class="carousel-pagination-nav-row" style="position: absolute; bottom: -2.2rem; left: 0; right: 0; display: flex; align-items: center; justify-content: center; gap: 0.7rem;">
+          <div class="carousel-pagination">
+            <span *ngFor="let _ of paginationArray; let i = index"
+                  class="carousel-dot" [class.active]="i === currentSlide"
+                  (click)="goToSlide(i)"></span>
+          </div>
+        </div>
+      </div>
+      <button class="carousel-nav-btn right" [disabled]="currentSlide >= filteredBooks().length - cardsPerView" (click)="nextSlide($event)" aria-label="Next" *ngIf="filteredBooks().length > cardsPerView">
+        <span class="carousel-arrow modern">
+          <svg width="24" height="24" viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </button>
+    </div>
+  </div>
+</main>
+<router-outlet />

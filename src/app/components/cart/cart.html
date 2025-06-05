@@ -1,0 +1,31 @@
+<div class="cart-glass">
+  <h2>Your Cart</h2>
+  <div *ngIf="items.length === 0" class="empty-cart">Your cart is empty.</div>
+  <ul *ngIf="items.length > 0">
+    <li *ngFor="let item of items; let i = index" class="cart-item">
+      <div class="cart-info">
+        <div class="cart-title">
+          <img [src]="item.cover || item.image || '/assets/default-cover.png'" alt="Book cover" style="height: 32px; width: 22px; margin-right: 8px; vertical-align: middle; border-radius: 2px; box-shadow: 0 1px 4px rgba(0,0,0,0.08);" />
+          {{ item.title }}
+          <span *ngIf="item.quantity > 1" class="cart-qty">&times;{{ item.quantity }}</span>
+        </div>
+        <div class="cart-author">by {{ item.author }}</div>
+        <div class="cart-price">
+          ${{ (item.price * (item.quantity || 1)).toFixed(2) }}
+          <span *ngIf="item.quantity > 1" class="cart-qty-detail"> ({{ item.quantity }} × ${{ item.price.toFixed(2) }})</span>
+        </div>
+        <div class="cart-qty-controls">
+          <button (click)="quantityChange(i, item.quantity - 1)" [disabled]="item.quantity <= 1" aria-label="Decrease quantity">-</button>
+          <input #qtyInput type="number" min="0" [value]="item.quantity" (change)="quantityChange(i, qtyInput.valueAsNumber)" style="width: 2.5em; text-align: center; margin: 0 0.5em;" />
+          <button (click)="quantityChange(i, item.quantity + 1)" aria-label="Increase quantity">+</button>
+        </div>
+      </div>
+      <button mat-icon-button color="warn" (click)="remove(i)">
+        <span aria-label="Remove">🗑️</span>
+      </button>
+    </li>
+  </ul>
+  <div *ngIf="items.length > 0" class="cart-total">
+    <span>Total:</span> <span class="total-price">${{ total.toFixed(2) }}</span>
+  </div>
+</div>
